@@ -1,14 +1,31 @@
 
-function Canvas(width, height) {
+function AnsiTerminal(width, height) {
   this.width = width;
   this.height = height;
   //this.content = new Array(width*height);
   this.clear()
+
+  this.fontFg='normal'
+  this.fontBg='normal'
+  this.pointColor='normal'
 }
 
+exports.colors = {
+    black: 0
+  , red: 1
+  , green: 2
+  , yellow: 3
+  , blue: 4
+  , magenta: 5
+  , cyan: 6
+  , white: 7
+  , normal: 9
+};
+
 var methods = {
-  set: function(coord) {
-    this.content[coord] = '\033[47m \033[49m';
+  set: function(coord) { 
+    var color = exports.colors[this.pointColor]    
+    this.content[coord] = '\033[4' + color + 'm ' + '\033[49m';
   },
   unset: function(coord) {
     this.content[coord] = null;
@@ -19,7 +36,7 @@ var methods = {
 };
 
 Object.keys(methods).forEach(function(method) {
-  Canvas.prototype[method] = function(x, y) {
+  AnsiTerminal.prototype[method] = function(x, y) {
     if(!(x >= 0 && x < this.width && y >= 0 && y < this.height)) {
       return;
     }    
@@ -28,25 +45,32 @@ Object.keys(methods).forEach(function(method) {
   }
 });
 
-Canvas.prototype.getCoord = function(x, y) {
+AnsiTerminal.prototype.getCoord = function(x, y) {
     x = Math.floor(x);
     y = Math.floor(y);    
     return x + this.width*y;
 }
 
-Canvas.prototype.clear = function() {
+AnsiTerminal.prototype.clear = function() {
   this.content = new Array(this.width*this.height);
 };
 
 
-Canvas.prototype.fillText = function(str, x, y) {
+AnsiTerminal.prototype.writeText = function(str, x, y) {
   var coord = this.getCoord(x, y)
   for (var i=0; i<str.length; i++) {    
     this.content[coord+i]=str[i]
-  }  
+  }
+
+  var bg = exports.colors[this.fontBg]
+  var fg = exports.colors[this.fontFg]
+  
+  this.content[coord] = '\033[3' + fg + 'm' + '\033[4' + bg + 'm' +  this.content[coord]
+  this.content[coord+str.length-1] += '\033[39m\033[49m'
+
 }
 
-Canvas.prototype.frame = function frame(delimiter) {  
+AnsiTerminal.prototype.frame = function frame(delimiter) {  
   delimiter = delimiter || '\n';
   var result = [];
   for(var i = 0, j = 0; i < this.content.length; i++, j++) {
@@ -67,4 +91,4 @@ Canvas.prototype.frame = function frame(delimiter) {
 
 
 
-module.exports = Canvas;
+module.exports = AnsiTerminal;
