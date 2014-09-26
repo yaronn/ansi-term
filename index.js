@@ -22,14 +22,14 @@ exports.colors = {
 };
 
 var methods = {
-  set: function(coord) { 
+  set: function(coord) {  
     var color = exports.colors[this.color]    
-    this.content[coord] = '\033[4' + color + 'm ' + '\033[49m';
+    this.content[coord] = '\033[4' + color + 'm ' + '\033[49m';    
   },
-  unset: function(coord) {
+  unset: function(coord) {    
     this.content[coord] = null;
   },
-  toggle: function(coord) {
+  toggle: function(coord) {    
     this.content[coord] == this.content[coord]==null?'p':null;
   }
 };
@@ -54,8 +54,12 @@ AnsiTerminal.prototype.clear = function() {
   this.content = new Array(this.width*this.height);
 };
 
+AnsiTerminal.prototype.measureText = function(str) {
+  return {width: str.length * 1}
+};
 
-AnsiTerminal.prototype.writeText = function(str, x, y) {
+AnsiTerminal.prototype.writeText = function(str, x, y) {  
+  //console.log(str + ": " + x + "," + y)
   var coord = this.getCoord(x, y)
   for (var i=0; i<str.length; i++) {    
     this.content[coord+i]=str[i]
