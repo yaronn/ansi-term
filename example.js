@@ -2,7 +2,7 @@
 var AnsiTerminal = require('./')
 var c = new AnsiTerminal(20, 10)
 
-c.pointColor='cyan'
+c.color='cyan'
 
 for (var i=0; i<20; i++) {
    c.set(i, 5)

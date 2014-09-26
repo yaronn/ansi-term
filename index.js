@@ -7,7 +7,7 @@ function AnsiTerminal(width, height) {
 
   this.fontFg='normal'
   this.fontBg='normal'
-  this.pointColor='normal'
+  this.color='normal'
 }
 
 exports.colors = {
@@ -24,7 +24,7 @@ exports.colors = {
 
 var methods = {
   set: function(coord) { 
-    var color = exports.colors[this.pointColor]    
+    var color = exports.colors[this.color]    
     this.content[coord] = '\033[4' + color + 'm ' + '\033[49m';
   },
   unset: function(coord) {
