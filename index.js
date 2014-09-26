@@ -2,7 +2,6 @@
 function AnsiTerminal(width, height) {
   this.width = width;
   this.height = height;
-  //this.content = new Array(width*height);
   this.clear()
 
   this.fontFg='normal'
