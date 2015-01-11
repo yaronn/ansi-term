@@ -65,7 +65,7 @@ AnsiTerminal.prototype.writeText = function(str, x, y) {
     this.content[coord+i]=str[i]
   }
 
-  var bg = exports.colors[this.fontBg]
+  var bg = exports.colors[this.color]
   var fg = exports.colors[this.fontFg]
   
   this.content[coord] = '\033[3' + fg + 'm' + '\033[4' + bg + 'm' +  this.content[coord]
