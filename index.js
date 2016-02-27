@@ -67,7 +67,7 @@ function getBgCode(color) {
 
 var methods = {
   set: function(coord) {  
-    var color = getFgCode(this.color);
+    var color = getBgCode(this.color);
     this.content[coord] = color + ' \033[49m';    
   },
   unset: function(coord) {    
