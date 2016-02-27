@@ -1,3 +1,4 @@
+var x256 = require('x256');
 
 function AnsiTerminal(width, height) {
   this.width = width;
@@ -18,13 +19,56 @@ exports.colors = {
   , magenta: 5
   , cyan: 6
   , white: 7
-  , normal: 9
 };
+
+function getFgCode(color) {
+    // String Value
+    if(typeof color == 'string' && color != 'normal') {
+        return '\033[3' + exports.colors[color] + 'm';
+    }
+    // RGB Value
+    else if (Array.isArray(color) && color.length == 3)
+    {
+        return '\033[38;5;' + x256(color[0],color[1],color[2]) + 'm';
+    }
+    // Number
+    else if (typeof color == 'number')
+    {
+        return '\033[38;5;' + color + 'm';
+    }
+    // Default
+    else
+    {
+        return '\033[39m'
+    }
+}
+
+function getBgCode(color) {
+    // String Value
+    if(typeof color == 'string' && color != 'normal') {
+        return '\033[4' + exports.colors[color] + 'm';
+    }
+    // RGB Value
+    else if (Array.isArray(color) && color.length == 3)
+    {
+        return '\033[48;5;' + x256(color[0],color[1],color[2]) + 'm';
+    }
+    // Number
+    else if (typeof color == 'number')
+    {
+        return '\033[48;5;' + color + 'm';
+    }
+    // Default
+    else
+    {
+        return '\033[49m'
+    }
+}
 
 var methods = {
   set: function(coord) {  
-    var color = exports.colors[this.color]    
-    this.content[coord] = '\033[4' + color + 'm ' + '\033[49m';    
+    var color = getBgCode(this.color);
+    this.content[coord] = color + ' \033[49m';    
   },
   unset: function(coord) {    
     this.content[coord] = null;
@@ -65,10 +109,10 @@ AnsiTerminal.prototype.writeText = function(str, x, y) {
     this.content[coord+i]=str[i]
   }
 
-  var bg = exports.colors[this.color]
-  var fg = exports.colors[this.fontFg]
+  var bg = getBgCode(this.color);
+  var fg = getFgCode(this.fontFg);
   
-  this.content[coord] = '\033[3' + fg + 'm' + '\033[4' + bg + 'm' +  this.content[coord]
+  this.content[coord] = fg + bg +  this.content[coord]
   this.content[coord+str.length-1] += '\033[39m\033[49m'
 
 }
