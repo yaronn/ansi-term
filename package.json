@@ -11,5 +11,8 @@
     "url": "git@bitbucket.org:yaronn01/ansi-term.git"
   },
   "author": "Yaron Naveh (yaronn01@gmail.com)",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "x256": ">=0.0.1"
+  }
 }
